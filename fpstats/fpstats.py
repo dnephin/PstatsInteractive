@@ -131,10 +131,16 @@ class FilteredStats(object):
         for c_func, caller in callers.iteritems():
             if not self.include(c_func):
                 continue
+
+            if c_func == ('openlets/core/models.py', 81, '__unicode__'):
+                import ipdb; ipdb.set_trace()
+
             c_nc, c_cc, c_tt, c_ct = caller
             # TODO: allow line numbers to be different
             self.ftimes.setdefault(c_func, 0)
-            self.ftimes[c_func] += c_ct
+            # Find the portion of time to assign to the caller, this is
+            # total calls from caller / total called * cumulative time
+            self.ftimes[c_func] += c_nc / nc * ct
 
     def build_new_stats(self):
         self.filtered_stats = {}

@@ -1,2 +1,2 @@
-from fpstats.fpstats import FilteredStats 
-from fpstats.config import *
+from fpstats import FilteredStats 
+from config import *
