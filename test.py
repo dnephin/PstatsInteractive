@@ -25,7 +25,7 @@ def related(func, p, q):
 
 filename = 'sample.profile'
 p = Stats(filename)
-p.sort_stats('time')
+p.sort_stats('cum')
 p.print_stats(5)
 
 fp = FilteredStats(p, Config)
@@ -33,7 +33,7 @@ fp.calculate()
 fp.write('output.profile')
 
 q = Stats('output.profile')
-q.sort_stats('time')
+q.sort_stats('cum')
 q.print_stats(5)
 
 k = fp.ftimes.keys()

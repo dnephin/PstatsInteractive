@@ -129,7 +129,7 @@ class FilteredStats(object):
         """Assign portion of cumulative time to callers time. """
         cc, nc, tt, ct, callers = stats
         for c_func, caller in callers.iteritems():
-            if not self.include(c_func):
+            if not self.include(c_func) or func == c_func:
                 continue
 
             c_nc, c_cc, c_tt, c_ct = caller

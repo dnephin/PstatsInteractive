@@ -25,6 +25,14 @@ class Node(object):
 	def ttime(self):
 		return self.stats[2]
 
+	@property
+	def sum_callees(self):
+		return sum(s[3] for f, s in self.callee_stats.iteritems() if f != self.func)
+
+	@property
+	def diff_from_callees(self):
+		return self.ctime - (self.ttime + self.sum_callees)
+
 	def __repr__(self):
 		return "Node(%r, %r)" % (self.func, self.stats)
 
@@ -64,19 +72,14 @@ class Graph(object):
 			c_node.callee_stats[node.func] = stats[4][c_node.func]
 
 
-	def calc_sum_callees(self, node):
-		return sum(s[3] for f, s in node.callee_stats.iteritems() if f != node.func)
-
-
 	def isgood(self, node, threshold=0.00000001):
-		diff = node.ctime - (node.ttime + self.calc_sum_callees(node))
+		diff = node.ctime - (node.ttime + node.sum_callees)
 		if diff > threshold or diff <  - threshold:
-			print "%s failed %s" % (node, diff)
-			return False
-		return True
+			return node
+		return None
 
 if __name__ == "__main__":
 	from pstats import Stats
 	p = Stats('sample.profile')
 	g = Graph(p)
-	
+	badones = [g.isgood(n) for n in g.nodes.values() if g.isgood(n)]	
