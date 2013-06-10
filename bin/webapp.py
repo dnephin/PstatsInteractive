@@ -8,7 +8,8 @@ from pyramid.response import Response
 
 def main():
     config = Configurator()
-    config.add_settings(pstats_base_path=os.path.abspath('.'))
+    config.add_settings(pstats_base_path=os.path.abspath('./samples'))
+    config.add_static_view(name='s', path=os.path.abspath('./static'))
     config.scan('psi.web.views')
     return config.make_wsgi_app()
 
